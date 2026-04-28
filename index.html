@@ -14,11 +14,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <style>
-/* ================================================================
-   STYLE.CSS — Saran Sri Prasath Portfolio
-   Aesthetic: Editorial-Dark with neon-green accent
-   Fonts: Syne (display) + DM Sans (body) + DM Mono (code)
-================================================================ */
 
 /* ── 1. CSS VARIABLES (themes) ───────────────────────────────── */
 :root {
@@ -1503,7 +1498,6 @@ const ScrollReveal = (() => {
 
 /* ================================================================
    7. SKILL BARS
-   data-width must be a CSS percentage string e.g. "85%"
 ================================================================ */
 const SkillBars = (() => {
   const animate = (bar) => {
@@ -1534,8 +1528,6 @@ const SkillBars = (() => {
 
 /* ================================================================
    8. SKILL FILTERING
-   Buttons: data-filter="all|frontend|backend|tools"
-   Cards:   data-cat="frontend"  (single value)
 ================================================================ */
 const SkillFilter = (() => {
   const filterBtns = qsa('[data-filter]');
@@ -1570,8 +1562,6 @@ const SkillFilter = (() => {
 
 /* ================================================================
    9. PROJECT FILTERING
-   Buttons: data-pfilter="all|web|ai|tool"
-   Cards:   data-ptag="web tool"  (space-separated, multi-value)
 ================================================================ */
 const ProjectFilter = (() => {
   const filterBtns = qsa('[data-pfilter]');
@@ -1721,7 +1711,6 @@ const BackToTop = (() => {
 
 /* ================================================================
    13. CONTACT FORM
-   Field IDs: fname, femail, fsubject, fmessage
 ================================================================ */
 const ContactForm = (() => {
   const form = byId('contactForm');
