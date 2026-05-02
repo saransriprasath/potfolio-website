@@ -14,6 +14,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
   <style>
+/* ================================================================
+   STYLE.CSS — Saran Sri Prasath Portfolio
+   Aesthetic: Editorial-Dark with neon-green accent
+   Fonts: Syne (display) + DM Sans (body) + DM Mono (code)
+================================================================ */
 
 /* ── 1. CSS VARIABLES (themes) ───────────────────────────────── */
 :root {
@@ -1039,7 +1044,7 @@ button { cursor: pointer; font-family: inherit; }
                 </li>
                 <li>
                   <span class="detail-key mono">hobbies</span>
-                  <span class="detail-val">OSS, Gaming</span>
+                  <span class="detail-val">Music, Developing</span>
                 </li>
               </ul>
             </div>
@@ -1218,7 +1223,7 @@ button { cursor: pointer; font-family: inherit; }
           <div class="proj-card-header">
             <div class="proj-folder"><i class="fas fa-folder-open"></i></div>
             <div class="proj-links">
-              <a href="https://github.com/saransriprasath" target="_blank" rel="noopener" title="GitHub"><i class="fab fa-github"></i></a>
+              <a href="https://github.com/saransriprasath/potfolio-website" target="_blank" rel="noopener" title="GitHub"><i class="fab fa-github"></i></a>
               <a href="#" title="Live demo"><i class="fas fa-external-link-alt"></i></a>
             </div>
           </div>
@@ -1277,6 +1282,7 @@ button { cursor: pointer; font-family: inherit; }
           <div class="social-links">
             <a href="https://github.com/saransriprasath"   target="_blank" rel="noopener" class="social-btn" aria-label="GitHub"><i class="fab fa-github"></i></a>
             <a href="https://linkedin.com/in/saransriprasath" target="_blank" rel="noopener" class="social-btn" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            
           </div>
         </div>
 
@@ -1336,6 +1342,24 @@ button { cursor: pointer; font-family: inherit; }
   <button class="back-top" id="backTop" aria-label="Back to top">
     <i class="fas fa-arrow-up"></i>
   </button>
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDfbedCy81q_xNI5Xp1gAiKNPk-GujrJxs",
+    authDomain: "portfolio-saran-4937f.firebaseapp.com",
+    projectId: "portfolio-saran-4937f",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  window.db = db;
+  window.addDoc = addDoc;
+  window.collection = collection;
+  window.serverTimestamp = serverTimestamp;
+</script>
 
   <!-- ============================================================
        SCRIPT.JS — inline
@@ -1497,6 +1521,7 @@ const ScrollReveal = (() => {
 
 /* ================================================================
    7. SKILL BARS
+   data-width must be a CSS percentage string e.g. "85%"
 ================================================================ */
 const SkillBars = (() => {
   const animate = (bar) => {
@@ -1527,6 +1552,8 @@ const SkillBars = (() => {
 
 /* ================================================================
    8. SKILL FILTERING
+   Buttons: data-filter="all|frontend|backend|tools"
+   Cards:   data-cat="frontend"  (single value)
 ================================================================ */
 const SkillFilter = (() => {
   const filterBtns = qsa('[data-filter]');
@@ -1561,6 +1588,8 @@ const SkillFilter = (() => {
 
 /* ================================================================
    9. PROJECT FILTERING
+   Buttons: data-pfilter="all|web|ai|tool"
+   Cards:   data-ptag="web tool"  (space-separated, multi-value)
 ================================================================ */
 const ProjectFilter = (() => {
   const filterBtns = qsa('[data-pfilter]');
@@ -1710,6 +1739,7 @@ const BackToTop = (() => {
 
 /* ================================================================
    13. CONTACT FORM
+   Field IDs: fname, femail, fsubject, fmessage
 ================================================================ */
 const ContactForm = (() => {
   const form = byId('contactForm');
@@ -1751,31 +1781,29 @@ const ContactForm = (() => {
     });
 
     form.addEventListener('submit', async e => {
-      e.preventDefault();
+  e.preventDefault();
 
-      const ok = validateField('fname') & validateField('femail') & validateField('fmessage');
+  const name = byId('fname').value;
+  const email = byId('femail').value;
+  const subject = byId('fsubject').value;
+  const message = byId('fmessage').value;
 
-      if (!ok) {
-        form.querySelector('.error') && form.querySelector('.error').focus();
-        showNote('Please fix the errors above.', true);
-        return;
-      }
-
-      const submitBtn = form.querySelector('.form-submit');
-      submitBtn.disabled   = true;
-      submitBtn.textContent = 'Sending…';
-
-      // Simulate network delay
-      await new Promise(r => setTimeout(r, 1200));
-
-      form.reset();
-      qsa('.form-input', form).forEach(el => el.classList.remove('valid', 'error'));
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = 'Send Message <span class="btn-arrow">→</span>';
-
-      showNote('✓ Message sent! I\'ll get back to you soon.');
-      setTimeout(() => { if (note) note.textContent = ''; }, 5000);
+  try {
+    await window.addDoc(window.collection(window.db, "messages"), {
+      name,
+      email,
+      subject,
+      message,
+      createdAt: window.serverTimestamp()
     });
+
+    alert("Message sent ✅");
+    form.reset();
+
+  } catch (err) {
+    alert("Error ❌");
+  }
+});
   };
 
   return { init };
